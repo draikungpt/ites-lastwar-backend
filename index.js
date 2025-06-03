@@ -1,11 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { google } = require("googleapis");
-const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Cargar credenciales desde un archivo JSON (añade el tuyo en tu proyecto)
-const credentials = require("./vaulted-channel-89413-5932fbdcbf4e.json");
+const app = express();
+
+// Cargar credenciales desde variables de entorno
+const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
 
 // Configurar acceso a la hoja
 const auth = new google.auth.GoogleAuth({
@@ -15,7 +15,7 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: "v4", auth });
 
 const SPREADSHEET_ID = "1JifUqUTquqiHOkFTqu9oDjH6c0oSnuW3-Lex2kYcXoA";
-const SHEET_NAME = "Full 1"; // <- usa el nombre correcto
+const SHEET_NAME = "Full 1";
 
 app.use(bodyParser.json());
 
@@ -54,6 +54,5 @@ app.post("/actualizar", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log("Servidor corriendo en puerto", PORT);
-});
+// 👇 Esto es lo importante en Vercel
+module.exports = app;
