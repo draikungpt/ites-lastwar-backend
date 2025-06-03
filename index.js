@@ -6,9 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Habilitar CORS solo para Netlify
-app.use(cors({
-  origin: "https://suministros-ites.netlify.app"
-}));
+app.use(cors()); // Acepta cualquier origen
 
 // Parsear JSON en requests
 app.use(bodyParser.json());
