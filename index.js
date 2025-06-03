@@ -5,6 +5,7 @@ const { google } = require("googleapis");
 const app = express();
 
 // Cargar credenciales desde variables de entorno
+console.log("Valor crudo de la variable de entorno:", process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
 
 // Configurar acceso a la hoja
