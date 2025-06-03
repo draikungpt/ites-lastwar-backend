@@ -1,14 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const { google } = require("googleapis");
-
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Habilitar CORS solo para Netlify
+app.use(cors({
+  origin: "https://suministros-ites.netlify.app"
+}));
+
+// Parsear JSON en requests
+app.use(bodyParser.json());
 
 // Cargar credenciales desde variables de entorno
-console.log("Valor crudo de la variable de entorno:", process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
 
-// Configurar acceso a la hoja
+// Configurar acceso a la hoja de Google Sheets
 const auth = new google.auth.GoogleAuth({
   credentials,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
@@ -17,8 +25,6 @@ const sheets = google.sheets({ version: "v4", auth });
 
 const SPREADSHEET_ID = "1JifUqUTquqiHOkFTqu9oDjH6c0oSnuW3-Lex2kYcXoA";
 const SHEET_NAME = "Full 1";
-
-app.use(bodyParser.json());
 
 app.post("/actualizar", async (req, res) => {
   const { x, y, estado } = req.body;
@@ -55,5 +61,6 @@ app.post("/actualizar", async (req, res) => {
   }
 });
 
-// 👇 Esto es lo importante en Vercel
-module.exports = app;
+app.listen(PORT, () => {
+  console.log("Servidor corriendo en puerto", PORT);
+});
